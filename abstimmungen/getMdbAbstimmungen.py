@@ -4,7 +4,7 @@ import pandas as pd
 import pdb
 
 OPTIONS = ['ja', 'nein', 'Enthaltung', 'ungültig', 'nichtabgegeben']
-COLS = ['Name', 'Vorname', 'Bezeichnung']
+COLS = ['Name', 'Vorname', 'Fraktion/Gruppe']
 
 
 def setVotingCategory(data, title):
@@ -30,7 +30,9 @@ def getMdbAbstimmungen():
         data.append(abstimmung)
 
 
-    mdbAbstimmungen = reduce(lambda df1, df2: df1.merge(df2, on=['Name', 'Vorname', 'Bezeichnung'], how='outer'), data)
+    mdbAbstimmungen = reduce(lambda df1, df2: df1.merge(df2, on=COLS, how='outer'), data)
+    mdbAbstimmungen.rename(columns = {COLS[2]: 'party', 'Name':'name', 'Vorname':'first_name'}, inplace=True)
+    
     mdbAbstimmungen.to_csv('../../data/mdbAbstimmungen.csv')
 
 
